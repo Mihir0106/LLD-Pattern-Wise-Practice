@@ -1,4 +1,4 @@
-package StrategyPattern.InterfaceImplmnetation;
+package StrategyPattern.InterfaceImplementation;
 
 import StrategyPattern.Interfaces.IQuackStrategy;
 

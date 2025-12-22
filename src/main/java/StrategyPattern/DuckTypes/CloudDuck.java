@@ -1,7 +1,7 @@
 package StrategyPattern.DuckTypes;
 
 import StrategyPattern.Duck;
-import StrategyPattern.InterfaceImplmnetation.JetFlyStrategy;
+import StrategyPattern.InterfaceImplementation.JetFlyStrategy;
 import StrategyPattern.Interfaces.IDisplayStrategy;
 import StrategyPattern.Interfaces.IFlyStrategy;
 import StrategyPattern.Interfaces.IQuackStrategy;
