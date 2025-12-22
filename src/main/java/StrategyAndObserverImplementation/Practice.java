@@ -3,38 +3,38 @@ package StrategyAndObserverImplementation;
 import StrategyAndObserverImplementation.Observers.AuditLogger;
 import StrategyAndObserverImplementation.Observers.DashBoard;
 import StrategyAndObserverImplementation.Observers.TradingBot;
+import StrategyAndObserverImplementation.TradingStrategies.ReversionTradingStrategy;
 
 public class Practice {
 
-    static void main() {
-        MarketDataFeed marketDataFeed = new MarketDataFeed();
+    public static void main(String[] args) {
+        // 1. Create the Subject (Market Data)
+        MarketDataFeed marketFeed = new MarketDataFeed();
 
-        AuditLogger auditLogger = new AuditLogger(marketDataFeed);
-        marketDataFeed.add(auditLogger);
+        // 2. Create Observers
+        DashBoard dashboard = new DashBoard(marketFeed);
+        AuditLogger logger = new AuditLogger(marketFeed);
+        TradingBot bot = new TradingBot(marketFeed); // Starts with Momentum Strategy
 
-        DashBoard dashBoard = new DashBoard(marketDataFeed);
-        marketDataFeed.add(dashBoard);
+        // 3. Register Observers
+        marketFeed.add(dashboard);
+        marketFeed.add(logger);
+        marketFeed.add(bot);
 
-        TradingBot tradingBot = new TradingBot(marketDataFeed);
-        marketDataFeed.add(tradingBot);
+        System.out.println("--- Market Opens: Price 100 ---");
+        marketFeed.updateLatestPrice(100);
+        // Bot records prevPrice = 100, no action yet
 
-        int num = 10;
-        marketDataFeed.updateLatestPrice((int) (num + (num*0.3f)));
-        System.out.println("-----------------");
-        marketDataFeed.updateLatestPrice((int) (num + (num*0.5f)));
-        System.out.println("-----------------");
-        marketDataFeed.updateLatestPrice((int) (num));
-        System.out.println("-----------------");
+        System.out.println("\n--- Price Jump to 103 (Momentum Trigger) ---");
+        // 103 is > 100 + 2% (102). Momentum should BUY.
+        marketFeed.updateLatestPrice(103);
+
+        System.out.println("\n--- User Switches Strategy to Reversion ---");
+        bot.setTradingStrategy(new ReversionTradingStrategy());
+
+        System.out.println("\n--- Price Drop to 95 (Reversion Trigger) ---");
+        // 95 is a significant drop from 103. Reversion should BUY (if logic is fixed).
+        marketFeed.updateLatestPrice(95);
     }
 }
 
-
-/*
-BroadCast to User DashBoard, Audit Logger and Analytics Engine
-Execute Trades
-
-
-Market Data Feed prices
-
-
- */
